@@ -37,5 +37,51 @@ module.exports = {
         
     
         return response.json(dev);
-    }
+    },
+
+    async delete(request,response){
+        const { github_username } = request.query;
+        const dev = await Dev.findOne({ github_username });
+        if (dev){
+            await Dev.deleteOne(dev);
+            return response.json( {status: "Sucesso"});
+        }
+
+        return response.json( {status: "Falha"});
+    },
+
+    async put(request, response) {
+        const { github_username, techs, latitude, longitude} = request.body;
+        let dev = await Dev.findOne({ github_username });
+
+        if (!dev){
+            return response.json({status: "Falha"});
+        }
+        
+        const apiResponse = await axios.get(`https://api.github.com/users/${github_username}`);
+    
+        const { name = login, avatar_url, bio = 'Não Informado'} = apiResponse.data;
+    
+        const techsArray = parseStringAsArray(techs);
+        
+        const location = {
+            type: 'Point',
+            coordinates: [longitude, latitude],
+        }
+
+        const update = {
+            $set:{
+                name,
+                avatar_url,
+                bio,
+                techs: techsArray,
+                location,
+            },
+        };
+
+        await Dev.updateOne(dev, update);
+        dev = await Dev.findOne({ github_username });
+
+        return response.json(dev);
+    },
 };
