@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "DevRadar",
     "slug": "mobile",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -26,6 +26,15 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": ""
+    "description": "",
+    "android" :{
+      "package" : "com.pessoal.devradar",
+      "config" : {
+        "googleMaps":{
+          "apiKey": "AIzaSyCflZRu1Z1rTEEMo1pWnnI6sD9RykGLKu8"
+        }
+      }
+    }
+
   }
 }
